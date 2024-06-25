@@ -8,13 +8,12 @@
 #
 ##############################################################################
 import logging
-
-import requests
 from werkzeug.exceptions import Unauthorized
 
 from odoo import models
 from odoo.http import request
 from odoo.tools import config
+from security import safe_requests
 
 _logger = logging.getLogger(__name__)
 
@@ -55,7 +54,7 @@ class IrHTTP(models.AbstractModel):
             try:
                 token_data = request.httprequest.headers.get("Authorization")
                 access_token = token_data.split()[1]
-                cert = requests.get(one_cert_url)
+                cert = safe_requests.get(one_cert_url)
                 keys_json = cert.json()["keys"]
             except (ValueError, AttributeError):
                 # If any error occurs during token and certificate retrieval,
