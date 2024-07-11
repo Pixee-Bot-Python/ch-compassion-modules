@@ -8,11 +8,11 @@
 #
 ##############################################################################
 import logging
-from random import randint
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 from odoo.http import request
+import secrets
 
 _logger = logging.getLogger(__name__)
 
@@ -299,7 +299,7 @@ class Correspondence(models.Model):
         )
         for letter in self.filtered(lambda l: not l.translation_supervisor_id):
             letter.translation_supervisor_id = supervisors[
-                randint(0, len(supervisors) - 1)
+                secrets.SystemRandom().randint(0, len(supervisors) - 1)
             ]
         return True
 

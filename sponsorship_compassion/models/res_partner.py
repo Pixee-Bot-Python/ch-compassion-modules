@@ -8,13 +8,13 @@
 #
 ##############################################################################
 import functools
-import random
 import string
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 from .contracts import SPONSORSHIP_TYPE_LIST
+import secrets
 
 
 # For more flexibility we have split "res.partner" by functionality
@@ -386,7 +386,7 @@ class ResPartner(models.Model):
         partner = self.with_context(no_upsert=True, tracking_disable=True).sudo()
 
         def _random_str():
-            return "".join([random.choice(string.ascii_letters) for n in range(8)])
+            return "".join([secrets.choice(string.ascii_letters) for n in range(8)])
 
         # referenced users are unlinked to avoid error when self.active is set to False
         partner.user_ids.unlink()

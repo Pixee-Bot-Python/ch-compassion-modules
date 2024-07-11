@@ -7,10 +7,10 @@
 #
 ##############################################################################
 import logging
-import random
 
 from odoo import api, fields, models
 from odoo.tools.safe_eval import safe_eval
+import secrets
 
 _logger = logging.getLogger(__name__)
 
@@ -159,10 +159,10 @@ class AppTile(models.Model):
                         # We drop tiles with expectation equal 1 tile / child
                         if (
                             not to_pray_children
-                            or random.uniform(0, 1) > num_children / num_prayers
+                            or secrets.SystemRandom().uniform(0, 1) > num_children / num_prayers
                         ):
                             continue
-                        child = random.choice(to_pray_children)
+                        child = secrets.choice(to_pray_children)
                         text_data = tile._render_single_tile(child)
                         if text_data:
                             tile_json.update(text_data)
