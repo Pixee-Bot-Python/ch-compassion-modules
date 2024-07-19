@@ -8,12 +8,12 @@
 ##############################################################################
 import json
 import logging
-import random
 from collections import defaultdict
 
 from dateutil.parser import parse
 
 from odoo import api, fields, models
+import secrets
 
 _logger = logging.getLogger(__name__)
 
@@ -436,14 +436,14 @@ class AppHub(models.AbstractModel):
 
         # We shuffle the tile to not have the same order of display every time
         for sub_group in tile_grouped.values():
-            random.shuffle(sub_group)
+            secrets.SystemRandom().shuffle(sub_group)
 
         # For weighted random, we create a list of every possible tile subtype
         # to select at random (a subtype with n tiles appears n times)
         random_list = []
         for k, v in possible_subtype.items():
             random_list += [k] * v
-        random.shuffle(random_list)
+        secrets.SystemRandom().shuffle(random_list)
 
         # For every tile currently displayed on the hub we try to add one or
         # more (as defined above) new tile in between from the spread group
@@ -465,7 +465,7 @@ class AppHub(models.AbstractModel):
                 # it at a previous step)
                 if (
                     len(spread_group) > (number_tile - 1)
-                    or random.random() < percent_to_add
+                    or secrets.SystemRandom().random() < percent_to_add
                 ):
                     number_jump = min(diff, max(1, number_spread_tile // number_tile))
                     jump = max(1, diff // (number_jump + 1))
