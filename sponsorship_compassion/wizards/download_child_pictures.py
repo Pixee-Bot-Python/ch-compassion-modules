@@ -12,9 +12,8 @@ import logging
 from io import BytesIO
 from zipfile import ZipFile
 
-import requests
-
 from odoo import api, fields, models
+from security import safe_requests
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +82,7 @@ class DownloadChildPictures(models.TransientModel):
             for child in self.child_ids.filtered("image_url"):
                 child_code = child.local_id
                 url = self.get_picture_url(child)
-                data = base64.encodebytes(requests.get(url).content)
+                data = base64.encodebytes(safe_requests.get(url).content)
 
                 _format = url.split(".")[-1]
                 fname = f"{child.sponsor_ref or ''}_{child_code}.{_format}"
@@ -138,7 +137,7 @@ class DownloadChildPictures(models.TransientModel):
         children_with_invalid_url = []
         for child in self.child_ids.filtered("image_url"):
             url = self.get_picture_url(child)
-            if not requests.get(url).content:
+            if not safe_requests.get(url).content:
                 # Not good, the url doesn't lead to an image
                 children_with_invalid_url += [child.local_id]
         if children_with_invalid_url:
