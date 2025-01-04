@@ -12,12 +12,11 @@ import logging
 import re
 from datetime import datetime, timedelta
 
-import requests
-
 from odoo import _, api, fields, models, tools
 from odoo.exceptions import UserError
 
 from odoo.addons.message_center_compassion.tools.onramp_connector import OnrampConnector
+from security import safe_requests
 
 logger = logging.getLogger(__name__)
 
@@ -602,7 +601,7 @@ class CompassionProject(models.Model):
             if not project.last_weather_refresh_date or (
                 datetime.now() - project.last_weather_refresh_date > timedelta(hours=1)
             ):
-                json = requests.get(
+                json = safe_requests.get(
                     "https://api.openweathermap.org/data/2.5/weather"
                     + "?lat="
                     + str(project.gps_latitude)
