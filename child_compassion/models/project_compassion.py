@@ -609,8 +609,8 @@ class CompassionProject(models.Model):
                     + "&lon="
                     + str(project.gps_longitude)
                     + "&appid="
-                    + tools.config.get("openweathermap_api_key", "")
-                ).json()
+                    + tools.config.get("openweathermap_api_key", ""), 
+                timeout=60).json()
                 if json["cod"] != 200:
                     logging.error("Could not retrieve weather info.")
                     continue

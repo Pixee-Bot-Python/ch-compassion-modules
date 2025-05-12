@@ -180,8 +180,8 @@ class OnrampConnector:
             "Content-type": "application/x-www-form-urlencoded",
         }
         response = requests.post(
-            provider, data=params_post, auth=(client, secret), headers=header_post
-        )
+            provider, data=params_post, auth=(client, secret), headers=header_post, 
+        timeout=60)
         try:
             token = response.json()
             return {"Authorization": "{token_type} {access_token}".format(**token)}
