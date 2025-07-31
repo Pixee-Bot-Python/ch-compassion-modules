@@ -17,6 +17,7 @@ import tempfile
 
 from odoo import fields, models
 from odoo.tools import config
+from security import safe_command
 
 _logger = logging.getLogger(__name__)
 
@@ -220,7 +221,7 @@ class CorrespondenceTemplate(models.Model):
                     "-dxdebug.remote_host=127.0.0.1",
                 ]
             )
-        proc = subprocess.Popen(php_command_args, stderr=std_err_file)
+        proc = safe_command.run(subprocess.Popen, php_command_args, stderr=std_err_file)
         proc.communicate()
 
         # Clean temp files
